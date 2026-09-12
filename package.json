@@ -1,0 +1,31 @@
+{
+  "name": "belajar-typescript-generic",
+  "version": "1.0.0",
+  "description": "Belajar TypeScript Generic",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.[t|j]sx?$": "babel-jest"
+    },
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/"
+    ]
+  },
+  "author": "Rafael Pransa",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@babel/core": "^8.0.5",
+    "@babel/preset-env": "^8.0.5",
+    "@babel/preset-typescript": "^8.0.1",
+    "@jest/globals": "^30.5.1",
+    "@types/jest": "^30.0.0",
+    "babel-jest": "^30.5.1",
+    "jest": "^30.5.1",
+    "typescript": "^7.0.2"
+  }
+}
