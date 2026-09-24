@@ -23,7 +23,7 @@ describe('Type Manipulation Advanced 02', () => {
         // Assertion (penegasan) - Menegaskan bahwa tipe data yang diharapkan sesuai
         expect(nama).toBe("Rafael Pransa");
         expect(umur).toBe(22);
-        expect(jurusan).toBe("Teknik Informatika"); ``
+        expect(jurusan).toBe("Teknik Informatika");
     });
 
     // Soal 2 - Infer
@@ -46,15 +46,15 @@ describe('Type Manipulation Advanced 02', () => {
         expect(typeof dataB).toBe("number");
 
         // Contoh menggunakan fungsi helper dengan generic dan infer
-        function getFirstElemet<T extends any[]>(arr: T): AmbilArray<T> {
+        function getFirstElement<T extends any[]>(arr: T): AmbilArray<T> {
             return arr[0];
         };
 
         const namaBuah = ["Apel", "Manggis", "Jeruk"];
         const angka = [10, 15, 11];
 
-        const hasilAmbilString = getFirstElemet(namaBuah);
-        const hasilAmbilAngka = getFirstElemet(angka);
+        const hasilAmbilString = getFirstElement(namaBuah);
+        const hasilAmbilAngka = getFirstElement(angka);
 
         // Assertion
         expect(hasilAmbilString).toBe("Apel");
@@ -79,5 +79,101 @@ describe('Type Manipulation Advanced 02', () => {
         // Assertion nilai dan tipe data runtime
         expect(hasil).toBe(82);
         expect(typeof hasil).toBe("number");
+    });
+
+    // Soal 4 - Distributive Conditional Types
+    it('should work for distributive conditional types', () => {
+        type CekNumber<T> = T extends number ? "Number" : "Bukan Number";
+
+        type A = CekNumber<number>
+        type B = CekNumber<string>
+        type C = CekNumber<number | string>
+
+        const nilaiA: A = "Number";
+        const nilaiB: B = "Bukan Number";
+        const nilaiC1: C = "Number";
+        const nilaiC2: C = "Bukan Number";
+
+        // Assertion
+        expect(nilaiA).toBe("Number");
+        expect(nilaiB).toBe("Bukan Number");
+        expect(nilaiC1).toBe("Number");
+        expect(nilaiC2).toBe("Bukan Number");
+    });
+
+    // Soal 5 - Custom Pick
+    it('should work for Custom Pick', () => {
+        type PickCustom<T, K extends keyof T> = {
+            [P in K]: T[P];
+        };
+
+        interface User {
+            id: number;
+            nama: string;
+            umur: number;
+            email: string;
+        };
+
+        type UserPublic = PickCustom<User, "id" | "nama" | "email">
+
+        const user: UserPublic = {
+            id: 1,
+            nama: "Rafael Pransa",
+            email: "rafael@gmail.com"
+        };
+
+        expect(user.nama).toBe("Rafael Pransa");
+    });
+
+    // Soal 6 - Custom Omit
+    it('should work for Custom Omit', () => {
+        type OmitCustom<T, K extends keyof T> = {
+            [P in Exclude<keyof T, K>]: T[P];
+        };
+
+
+
+        interface User {
+            id: number;
+            nama: string;
+            umur: number;
+            email: string;
+        }
+
+        type UserTanpaEmail = OmitCustom<User, "email">;
+
+        const user: UserTanpaEmail = {
+            id: 1,
+            nama: "Rafael Pransa",
+            umur: 22,
+        };
+
+        expect(user.umur).toBe(22);
+        expect(typeof user.umur).toBe("number");
+    });
+
+    // Bonus Utility type nullable
+    it('should work for Utility type Nullable', () => {
+        type Nullable<T> = {
+            [P in keyof T]: T[P] | null;
+        };
+
+        interface User {
+            id: number;
+            nama: string;
+            umur: number;
+            email: string;
+        };
+
+        type UserNullable = Nullable<User>;
+
+        const user: UserNullable = {
+            id: 1,
+            nama: "Rafael Pransa",
+            umur: null,
+            email: null,
+        };
+
+        expect(user.umur).toBeNull()
     });
 });
